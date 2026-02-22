@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>היכן הקסם קורה: הסטודיו של Keves — Keves</title>
+    <meta name="description" content="צצו לסטודיו שלנו - המקום שבו נולדים הדפסים מטורפים, רעיונות פרועים וקולקציות שלא תראו בשום מקום אחר. אנרגיית ניאון וכבשים בכל פינה!">
+    <meta name="keywords" content="Keves, סטודיו עיצוב, הפקות אופנה, קריאייטיב ישראלי, מאחורי הקלעים">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'ad090c8f-c0a1-484a-b59c-d219a187885e',
+    apiUrl: 'https://qaapi.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="היכן הקסם קורה: הסטודיו של Keves — Keves">
+  <meta property="og:description" content="צצו לסטודיו שלנו - המקום שבו נולדים הדפסים מטורפים, רעיונות פרועים וקולקציות שלא תראו בשום מקום אחר. אנרגיית ניאון וכבשים בכל פינה!">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="היכן הקסם קורה: הסטודיו של Keves — Keves">
+  <meta name="twitter:description" content="צצו לסטודיו שלנו - המקום שבו נולדים הדפסים מטורפים, רעיונות פרועים וקולקציות שלא תראו בשום מקום אחר. אנרגיית ניאון וכבשים בכל פינה!">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: #333 !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))), .sub-menu:not(:has(li)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .sub-menu.mobile-expanded { max-height: 500px !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: 44px !important; background: transparent !important; border: none !important; cursor: pointer !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      #mic-access-tool-general-button, .mic-access-tool-general-button,
+      #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+      ._access-icon, #mic-access-tool-box, .mic-access-tool-box,
+      #mic-init-access-tool #mic-access-tool-box, div[id*="mic-access-tool-box"], ._access-menu {
+        display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important;
+      }
+    </style>
+</head>
+<body>
+
+
+    <div class="mobile-search-panel" id="mobile-search-panel">
+      <div class="search-wrapper">
+        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+        <button class="search-submit" id="mobile-search-submit" title="חיפוש">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </button>
+        <button class="close-search" id="close-mobile-search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="search-results" id="mobile-search-results"></div>
+    </div>
+  
+<script>window.ZAPPY_WEBSITE_ID = "ad090c8f-c0a1-484a-b59c-d219a187885e";window.ZAPPY_API_BASE = (window.location.pathname.includes('/preview') ? "http://localhost:5001" : "https://qaapi.zappy5.com");</script>
+  <nav class="navbar" dir="rtl">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+  
+  <button class="phone-header-btn" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+  
+  <div class="nav-container">
+    <div class="nav-brand">
+      <a href="/" class="logo-link">
+        <img src="/assets/business-logo.webp" alt="Keves" class="logo" />
+      </a>
+    </div>
+    
+    <ul class="nav-menu" id="navMenu">
+
+    <li class="menu-item-has-children zappy-products-dropdown">
+      <a href="/products">
+        מוצרים
+        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"></path>
+        </svg>
+      </a>
+      <ul class="sub-menu" id="zappy-nav-category-links">
+        <li><a href="/products">כל המוצרים</a></li>
+        <!-- Categories will be loaded dynamically -->
+      </ul>
+    </li>
+  <li><a href="/about">אודות</a></li><li><a href="/studio">סטודיו</a></li><li><a href="/contact">צור קשר</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><a href="/login" class="login-link nav-login" title="התחברות"><svg class="login-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a><a href="#cart" class="cart-link nav-cart" id="cart-drawer-toggle" title="עגלת קניות"><svg class="cart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-count">0</span></a><div class="nav-search-box">
+    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    </button>
+    <div class="nav-search-results" id="nav-search-results"></div>
+  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button></div>
+    
+    
+  </div>
+</nav>
+
+    <nav class="zappy-catalog-menu rtl" id="zappy-catalog-menu" dir="rtl">
+      <div class="catalog-menu-container">
+        <a href="/products" class="catalog-menu-item catalog-menu-all">כל המוצרים</a>
+        <div class="catalog-menu-categories" id="zappy-category-links">
+          <!-- Categories will be loaded dynamically -->
+        </div>
+      </div>
+    </nav>
+  
+  
+  <main>
+    <section class="studio-banner-section" data-layout-spec="סטודיו-banner">
+  <div class="studio-banner-container">
+    <div class="studio-banner-content">
+      <h1 class="studio-banner-title">מצב סטודיו: <span class="studio-banner-title-highlight">ON</span></h1>
+      <h3 class="studio-banner-subtitle">קליפים, תפאורות מטורפות, ורגעי מאחורי הקלעים שלא תראו בשום מקום אחר</h3>
+      <a href="/contact" class="studio-banner-cta btn-primary">להזמין צילום</a>
+    </div>
+    
+    <div class="studio-banner-image-wrapper">
+      <img data-placeholder="studio-banner-image-1" data-context="Wide cinematic studio shot with neon magenta and purple lighting, modern lounge furniture with velvet textures, professional studio curtains in background, dramatic lighting setup with visible softboxes and LED strips, subtle sheep graffiti art on wall, urban comedy show aesthetic, late-night studio vibe, 21:9 aspect ratio, high-end production quality" width="1200" height="514" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='514'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FF0083;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23FF008320;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23grad)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='18' fill='white' text-anchor='middle' dy='.3em' font-weight='500'%3E%D7%90%D7%95%D7%9C%D7%A4%D7%9F%20Keves%20%D7%A2%D7%9D%20%D7%AA%D7%90%D7%95%D7%A8%D7%AA%20%D7%A0%D7%99%D7%90%D7%95%D7%9F%20%D7%95%D7%A8%D7%94%D7%99%D7%98%D7%99%20%D7%9C%D7%90%D7%95%D7%A0%D7%92%D7%B3%20%D7%9E%D7%95%D7%93%D7%A8%D7%A0%D7%99%D7%99%D7%9D%3C/text%3E%3C/svg%3E" alt="אולפן Keves עם תאורת ניאון ורהיטי לאונג׳ מודרניים">
+    </div>
+  </div>
+  
+  <div class="studio-banner-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="studio-neon-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#A12BFF;stop-opacity:1"></stop>
+          <stop offset="50%" style="stop-color:#FF3BA7;stop-opacity:1"></stop>
+          <stop offset="100%" style="stop-color:#39FFB6;stop-opacity:1"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M0,80 L0,60 L40,60 L40,20 L80,20 L1120,20 L1120,60 L1160,60 L1160,80 L1200,80 L1200,80 Z" fill="var(--bg-dark)"></path>
+      <path d="M40,60 L40,20 L80,20" stroke="url(#studio-neon-gradient)" stroke-width="2" fill="none"></path>
+      <path d="M1120,20 L1120,60 L1160,60" stroke="url(#studio-neon-gradient)" stroke-width="2" fill="none"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="studio-portfolio-section" data-layout-spec="סטודיו-portfolio">
+  <div class="studio-portfolio-container">
+    <div class="studio-portfolio-header">
+      <h2>פריימים סטילס עם ווליום.</h2>
+      <p>תאורת ניאון, צבעים מטורפים ותזמון קומי שמדבר בעד עצמו – רגעי סטודיו שנתפסו באווירה של לאונג' אורבני.</p>
+    </div>
+
+    <div class="studio-portfolio-grid">
+      <div class="studio-portfolio-item studio-portfolio-item-tall">
+        <div class="studio-portfolio-image-wrapper">
+          <img data-placeholder="studio-portfolio-image-1" data-context="Comedy show studio still with neon magenta and purple lighting, three Israeli comedians in casual urban fashion laughing together, dark charcoal background with soft lounge atmosphere, cinematic photography style, vibrant colors, theatrical energy" width="600" height="800" src="/assets/site-studio-portfolio-image-1.webp" alt="רגע סטודיו עם תאורת ניאון">
+        </div>
+        <h3>ניאון ושיחות לילה</h3>
+        <p>הרגע שבו הצחוק פוגש את האור הסגול – תזמון מושלם.</p>
+      </div>
+
+      <div class="studio-portfolio-item">
+        <div class="studio-portfolio-image-wrapper">
+          <img data-placeholder="studio-portfolio-image-2" data-context="Close-up of comedy sketch moment with bright neon pink and cyan lighting, young Israeli comedian making expressive face, urban studio backdrop with geometric patterns, bold theatrical style" width="600" height="400" src="/assets/site-studio-portfolio-image-2.webp" alt="סקיצה קומית עם תאורה דרמטית">
+        </div>
+        <h3>הבעות פנים בטכניקולור</h3>
+        <p>כשהפאנץ׳ליין מגיע עם תאורה דרמטית.</p>
+      </div>
+
+      <div class="studio-portfolio-item">
+        <div class="studio-portfolio-image-wrapper">
+          <img data-placeholder="studio-portfolio-image-3" data-context="Wide shot of comedy show studio set with neon signs, modern lounge furniture, purple and magenta ambient lighting, dark walls with geometric patterns, atmospheric photography" width="600" height="400" src="/assets/site-studio-portfolio-image-3.webp" alt="סט סטודיו עם עיצוב לאונג׳">
+        </div>
+        <h3>הסט שלנו, הבמה שלנו</h3>
+        <p>לאונג' מודרני שמרגיש כמו מועדון פרטי.</p>
+      </div>
+
+      <div class="studio-portfolio-item studio-portfolio-item-wide">
+        <div class="studio-portfolio-image-wrapper">
+          <img data-placeholder="studio-portfolio-image-4" data-context="Panoramic studio shot of three Israeli comedians performing together, vibrant neon lighting in magenta and cyan, modern urban set design with soft textures, energetic comedy show atmosphere" width="800" height="400" src="/assets/site-studio-portfolio-image-4.webp" alt="שלושת הקומיקאים על הבמה">
+        </div>
+        <h3>השלישייה בפעולה</h3>
+        <p>נעם, מתן ודור בתזמון שלא מאמינים לו.</p>
+      </div>
+
+      <div class="studio-portfolio-item">
+        <div class="studio-portfolio-image-wrapper">
+          <img data-placeholder="studio-portfolio-image-5" data-context="Comedy sketch with sheep mascot character and comedian, neon purple and pink lighting, playful urban studio setting, theatrical photography with bold colors and humor" width="600" height="400" src="/assets/site-studio-portfolio-image-5.webp" alt="סקיצה עם דמות הכבשה">
+        </div>
+        <h3>הכבשה בפריים</h3>
+        <p>כשהמסכוט שלנו גונב את ההצגה.</p>
+      </div>
+
+      <div class="studio-portfolio-item">
+        <div class="studio-portfolio-image-wrapper">
+          <img data-placeholder="studio-portfolio-image-6" data-context="Behind-the-scenes studio moment with neon lighting setup, purple and magenta gels, modern production equipment, atmospheric smoke, cinematic photography style" width="600" height="400" src="/assets/site-studio-portfolio-image-6.webp" alt="מאחורי הקלעים בסטודיו">
+        </div>
+        <h3>מאחורי הקסם</h3>
+        <p>התאורה, העשן, והכאוס היצירתי.</p>
+      </div>
+
+      <div class="studio-portfolio-item studio-portfolio-item-tall">
+        <div class="studio-portfolio-image-wrapper">
+          <img data-placeholder="studio-portfolio-image-7" data-context="Vertical portrait of Israeli comedian in stylish urban fashion, dramatic neon lighting in magenta and purple, dark charcoal background, confident theatrical pose, modern photography" width="600" height="800" src="/assets/site-studio-portfolio-image-7.webp" alt="פורטרט דרמטי עם תאורת ניאון">
+        </div>
+        <h3>פורטרט בניאון</h3>
+        <p>סטייל, עמדה, ותאורה שלא סולחת.</p>
+      </div>
+
+      <div class="studio-portfolio-item">
+        <div class="studio-portfolio-image-wrapper">
+          <img data-placeholder="studio-portfolio-image-8" data-context="Comedy show audience reaction shot with neon ambient lighting, young urban crowd laughing, purple and magenta glow, energetic nightclub atmosphere, candid photography" width="600" height="400" src="/assets/site-studio-portfolio-image-8.webp" alt="תגובת קהל עם תאורה אווירתית">
+        </div>
+        <h3>הקהל שלנו, האנרגיה שלנו</h3>
+        <p>כשהצחוק הופך לחוויה משותפת.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="studio-portfolio-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,60 L0,30 Q50,25 100,32 Q150,39 200,28 Q250,17 300,30 Q350,43 400,26 Q450,9 500,32 Q550,55 600,28 Q650,1 700,34 Q750,42 800,26 Q850,10 900,32 Q950,54 1000,28 Q1050,2 1100,30 Q1150,38 1200,30 L1200,60 Z" fill="#14081F"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="studio-capabilities-section" data-layout-spec="סטודיו-capabilities">
+  <div class="studio-capabilities-container">
+    <h2 class="studio-capabilities-title">מה הסטודיו יכול לספק</h2>
+    
+    <div class="studio-capabilities-grid">
+      <div class="studio-capability-card">
+        <div class="studio-capability-header">
+          <svg class="studio-capability-icon" data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 4C16 4 12 6 12 10C12 14 16 16 16 16C16 16 20 14 20 10C20 6 16 4 16 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            <ellipse cx="16" cy="18" rx="8" ry="4" stroke="currentColor" stroke-width="2"></ellipse>
+            <path d="M8 18V24C8 26.2091 11.5817 28 16 28C20.4183 28 24 26.2091 24 24V18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+          <h3 class="studio-capability-heading">קליפים קצרים</h3>
+        </div>
+        <p class="studio-capability-text">תוכן ויראלי מהיר לרשתות החברתיות – סרטונים קצרים עם פאנץ׳ים חדים, עריכה דינמית ואנרגיה שלא עוצרת. מושלם לאינסטגרם, טיקטוק ויוטיוב.</p>
+      </div>
+      
+      <div class="studio-capability-card">
+        <div class="studio-capability-header">
+          <svg class="studio-capability-icon" data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 6L18.5 13.5L26 16L18.5 18.5L16 26L13.5 18.5L6 16L13.5 13.5L16 6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+            <path d="M24 8L25 11L28 12L25 13L24 16L23 13L20 12L23 11L24 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+            <path d="M8 20L9 23L12 24L9 25L8 28L7 25L4 24L7 23L8 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+          </svg>
+          <h3 class="studio-capability-heading">סקצ׳ים ממותגים</h3>
+        </div>
+        <p class="studio-capability-text">תסריטים קומיים בהתאמה אישית למותג שלכם – משלבים הומור חכם עם מסרים מסחריים בצורה טבעית וזורמת. הקהל צוחק והמסר עובר.</p>
+      </div>
+      
+      <div class="studio-capability-card">
+        <div class="studio-capability-header">
+          <svg class="studio-capability-icon" data-element-type="icon" data-icon-type="svg" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="8" width="24" height="16" rx="2" stroke="currentColor" stroke-width="2"></rect>
+            <path d="M4 12H28" stroke="currentColor" stroke-width="2"></path>
+            <circle cx="8" cy="10" r="0.5" fill="currentColor"></circle>
+            <circle cx="10" cy="10" r="0.5" fill="currentColor"></circle>
+            <circle cx="12" cy="10" r="0.5" fill="currentColor"></circle>
+            <path d="M12 16L16 18L12 20V16Z" fill="currentColor"></path>
+            <path d="M18 17H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            <path d="M18 20H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+          <h3 class="studio-capability-heading">רגעי צילום בסט</h3>
+        </div>
+        <p class="studio-capability-text">תפאורות ייחודיות ותאורה ניאון מושלמת לצילומים סטילס ותוכן ויזואלי – הסטודיו שלנו הופך כל פריים לאמנות אינסטגרמית עם וייב אורבני מדליק.</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="studio-capabilities-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="pixel-spark-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+          <rect x="0" y="0" width="4" height="4" fill="var(--bg-light)" opacity="0.3"></rect>
+          <rect x="8" y="8" width="4" height="4" fill="var(--bg-light)" opacity="0.5"></rect>
+          <rect x="16" y="0" width="4" height="4" fill="var(--bg-light)" opacity="0.4"></rect>
+          <rect x="24" y="8" width="4" height="4" fill="var(--bg-light)" opacity="0.6"></rect>
+          <rect x="32" y="0" width="4" height="4" fill="var(--bg-light)" opacity="0.35"></rect>
+        </pattern>
+        <linearGradient id="dissolve-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="var(--bg-light)" stop-opacity="0.1"></stop>
+          <stop offset="50%" stop-color="var(--bg-light)" stop-opacity="0.5"></stop>
+          <stop offset="100%" stop-color="var(--bg-light)" stop-opacity="1"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M0,80 L0,40 Q100,38 200,42 T400,38 Q500,42 600,38 T800,42 Q900,38 1000,42 T1200,40 L1200,80 Z" fill="url(#dissolve-gradient)"></path>
+      <rect x="0" y="30" width="1200" height="50" fill="url(#pixel-spark-pattern)"></rect>
+    </svg>
+  </div>
+</section>
+
+<section class="studio-press-section" data-layout-spec="סטודיו-press">
+  <div class="studio-press-container">
+    <div class="studio-press-header">
+      <h2>נצפינו בשטח.</h2>
+      <p>כשהכבשים שלנו מופיעות בכל מקום – מהטלוויזיה ועד הרשת – אנחנו יודעים שעשינו משהו נכון.</p>
+    </div>
+
+    <div class="studio-press-grid">
+      <div class="studio-press-logo-tile">
+        <img data-placeholder="studio-press-image-1" data-context="Monochrome logo of Israeli tech news website or magazine, minimalist design, black and white, editorial style, for comedy fashion brand Keves press coverage" width="300" height="200" src="/assets/site-studio-press-image-1.webp" alt="לוגו פרסום 1">
+      </div>
+      <div class="studio-press-logo-tile">
+        <img data-placeholder="studio-press-image-2" data-context="Monochrome logo of Israeli entertainment blog or media outlet, simple black and white design, modern typography, for comedy fashion brand Keves media mentions" width="300" height="200" src="/assets/site-studio-press-image-2.webp" alt="לוגו פרסום 2">
+      </div>
+      <div class="studio-press-logo-tile">
+        <img data-placeholder="studio-press-image-3" data-context="Monochrome logo of Israeli lifestyle magazine, clean black and white logo, editorial publication, for comedy fashion brand Keves press features" width="300" height="200" src="/assets/site-studio-press-image-3.webp" alt="לוגו פרסום 3">
+      </div>
+      <div class="studio-press-logo-tile">
+        <img data-placeholder="studio-press-image-4" data-context="Monochrome logo of Israeli online culture magazine, minimalist black and white design, contemporary media outlet, for comedy fashion brand Keves coverage" width="300" height="200" src="/assets/site-studio-press-image-4.webp" alt="לוגו פרסום 4">
+      </div>
+      <div class="studio-press-logo-tile">
+        <img data-placeholder="studio-press-image-5" data-context="Monochrome logo of Israeli comedy or entertainment podcast, simple black and white branding, audio media logo, for comedy fashion brand Keves mentions" width="300" height="200" src="/assets/site-studio-press-image-5.webp" alt="לוגו פרסום 5">
+      </div>
+      <div class="studio-press-logo-tile">
+        <img data-placeholder="studio-press-image-6" data-context="Monochrome logo of Israeli fashion or streetwear blog, clean black and white design, modern editorial style, for comedy fashion brand Keves press features" width="300" height="200" src="/assets/site-studio-press-image-6.webp" alt="לוגו פרסום 6">
+      </div>
+    </div>
+
+    <div class="studio-press-footer">
+      <p>רוצים לדבר איתנו? עיתונאים, בלוגרים, וכל מי שסתם סקרן – <a href="/contact">צרו קשר</a> ונספר לכם את הסיפור המלא.</p>
+    </div>
+  </div>
+
+  <div class="studio-press-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,60 L0,0 L1200,0 L1200,60 Z" fill="var(--bg-dark)"></path>
+      <circle cx="100" cy="0" r="6" fill="var(--accent)"></circle>
+      <circle cx="300" cy="0" r="6" fill="var(--primary)"></circle>
+      <circle cx="500" cy="0" r="6" fill="var(--secondary)"></circle>
+      <circle cx="700" cy="0" r="6" fill="var(--accent)"></circle>
+      <circle cx="900" cy="0" r="6" fill="var(--primary)"></circle>
+      <circle cx="1100" cy="0" r="6" fill="var(--secondary)"></circle>
+    </svg>
+  </div>
+</section>
+
+<section class="studio-cta-section" data-layout-spec="סטודיו-cta">
+  <div class="studio-cta-container">
+    <div class="studio-cta-glow-top" aria-hidden="true"></div>
+    <div class="studio-cta-glow-bottom" aria-hidden="true"></div>
+    
+    <div class="studio-cta-content">
+      <h2 class="studio-cta-heading">מוכנים לעלות לשידור?</h2>
+      <p class="studio-cta-text">בואו נשתף פעולה, נצלם משהו מטורף, או פשוט נעשה רעש ביחד.</p>
+      
+      <div class="studio-cta-buttons">
+        <a href="/contact" class="studio-cta-btn studio-cta-btn-primary">
+          דברו איתנו
+        </a>
+        <a href="/about" class="studio-cta-btn studio-cta-btn-secondary">
+          קראו את הסיפור שלנו
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-grid">
+      <div class="footer-column footer-about">
+        <img src="/assets/business-logo.webp" alt="Keves" class="logo" />
+        <p class="footer-description">המקום שלך לאופנה ובידור - סטייל, יצירתיות וחוויות בלתי נשכחות</p>
+      </div>
+      
+      <div class="footer-column footer-links">
+        <h3 class="footer-heading">קישורים מהירים</h3>
+        <ul class="footer-nav">
+          <li><a href="/about">אודות</a></li>
+          <li><a href="/studio">סטודיו</a></li>
+          <li><a href="/contact">צור קשר</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column footer-contact">
+        <h3 class="footer-heading">יצירת קשר</h3>
+        <ul class="contact-list">
+          <li><i class="fas fa-envelope"></i> <a href="mailto:[business_email]">[business_email]</a></li>
+          <li><i class="fas fa-phone"></i> <a href="tel:[business_phone]">[business_phone]</a></li>
+          <li><a href="/"><i class="fas fa-map-marker-alt"></i> <span>[business_address]</span></a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column footer-social">
+        <h3 class="footer-heading">עקבו אחרינו</h3>
+        <div class="social-links">
+          <a href="[facebook_handle]" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="[instagram_handle]" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="[whatsapp_handle]" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <div class="footer-legal">
+        <a href="/privacy">מדיניות פרטיות</a>
+        <span class="separator">|</span>
+        <a href="/terms">תנאים והגבלות</a><span class="separator">|</span>
+            <a href="/return-policy" aria-label="מדיניות החזרות">
+              מדיניות החזרות
+            </a>
+        <span class="separator">|</span>
+        <a href="/accessibility">הצהרת נגישות</a>
+      </div>
+      <div class="footer-copyright">
+        <p>© 2026 Keves. All rights reserved.</p>
+        <a href="https://zappy5.com" target="_blank" class="zappy-attribution">Generated by Zappy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+</body>
+</html>

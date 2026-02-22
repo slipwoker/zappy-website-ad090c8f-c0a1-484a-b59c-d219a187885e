@@ -1,0 +1,79 @@
+# Business — Generative Engine Optimization Map
+
+---
+
+## Pages
+
+### בית
+https://example.com
+ביגוד אורבני עם הומור חד וסטייל מטורף. קפוצ'ונים מצחיקים לגברים, חולצות עם הדפסים מטורללים וכבשים בכל מקום. קנו אונליין עכשיו!
+
+### אודות
+https://example.com/about
+גלו את המותג הישראלי שנולד מתוכנית קומדיה אינטרנטית עם נועם סלע, מתן פרץ ודור יתח. הומור חד, סטייל נועז ואנרגיה אורבנית צעירה.
+
+### סטודיו
+https://example.com/studio
+צצו לסטודיו שלנו - המקום שבו נולדים הדפסים מטורפים, רעיונות פרועים וקולקציות שלא תראו בשום מקום אחר. אנרגיית ניאון וכבשים בכל פינה!
+
+### צור קשר
+https://example.com/contact
+יש לכם שאלה, רעיון משוגע או סתם רוצים להגיד שלום? כתבו לנו! הצוות של Keves כאן בשבילכם עם כל ההומור והסבלנות שיש לנו.
+
+### Products
+https://example.com/products
+המוצרים שלנו - Keves
+
+### Cart
+https://example.com/cart
+עגלת הקניות שלך
+
+### Checkout
+https://example.com/checkout
+תשלום
+
+### Login
+https://example.com/login
+התחברות לקוחות
+
+### Account
+https://example.com/account
+החשבון שלי
+
+### Order Success
+https://example.com/order-success
+תודה על ההזמנה
+
+### Product Detail
+https://example.com/product/:slug
+פרטי המוצר - Keves
+
+### Category
+https://example.com/category/:slug
+מוצרים - Keves
+
+## Legal & Policy
+
+### Privacy Policy
+https://example.com/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://example.com/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://example.com/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+# Business Context (for LLM understanding)
+
+## About Business
+---
+
+# Additional Resources
+
+- **Sitemap**: https://example.com/sitemap.xml
+- **Robots.txt**: https://example.com/robots.txt
