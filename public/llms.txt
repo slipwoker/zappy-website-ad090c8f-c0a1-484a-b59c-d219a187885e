@@ -1,6 +1,4 @@
-# Keves — Generative Engine Optimization Map
-
-> Keves is a humorous, bold Israeli brand born from a sharp, internet-savvy comedy show featuring Noam Sela, Matan Peretz, and Dor Yitach. The brand identity centers around sheep as the main visual element, with playful illustrations, comic winks, and cheeky graphics throughout. The vibe is late-night studio meets neon-lit urban energy—young, colorful, and a bit wild. The tone is witty, self-aware, and confidently theatrical, never taking itself too seriously while maintaining strong style and character.
+# Business — Generative Engine Optimization Map
 
 ---
 
@@ -72,15 +70,7 @@ Information about WCAG compliance and accessibility features.
 
 # Business Context (for LLM understanding)
 
-## About Keves
-Keves is a humorous, bold Israeli brand born from a sharp, internet-savvy comedy show featuring Noam Sela, Matan Peretz, and Dor Yitach. The brand identity centers around sheep as the main visual element, with playful illustrations, comic winks, and cheeky graphics throughout. The vibe is late-night studio meets neon-lit urban energy—young, colorful, and a bit wild. The tone is witty, self-aware, and confidently theatrical, never taking itself too seriously while maintaining strong style and character.
-
-## Target Audience
-קהל צעיר, אורבני, חובב הומור
-
-## Industry
-אופנה ובידור
-
+## About Business
 ---
 
 # Additional Resources
