@@ -9118,6 +9118,50 @@ nav.navbar .menu-item-has-children::after,
 
 /* ==END ZAPPY V2 E-COMMERCE THEME CSS== */
 
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FIX: Mobile Nav Contrast on Transparent/Dark Navbar
+   Navbar is DARK → mobile nav text uses var(--text-light).
+   Color determined by navbar background luminance calculation.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  /* 1. Hamburger button + phone button */
+  .mobile-toggle,
+  .phone-header-btn {
+    color: var(--text-light) !important;
+  }
+  .mobile-toggle svg,
+  .phone-header-btn svg {
+    color: inherit !important;
+  }
+
+  /* 2. Submenu links */
+  .navbar .sub-menu li a,
+  nav.navbar .sub-menu li a,
+  .nav-menu .sub-menu a,
+  .zappy-products-dropdown .sub-menu a,
+  .sub-menu a {
+    color: var(--text-light) !important;
+  }
+
+  /* 3. Dropdown arrow toggle */
+  .mobile-submenu-toggle {
+    color: var(--text-light) !important;
+  }
+
+  /* 4. Override ecommerce-specific color on hamburger */
+  html[data-zappy-site-type="ecommerce"] #mobileToggle,
+  html[data-zappy-site-type="ecommerce"] .mobile-toggle {
+    color: var(--text-light) !important;
+  }
+  html[data-zappy-site-type="ecommerce"] #mobileToggle svg,
+  html[data-zappy-site-type="ecommerce"] .mobile-toggle svg {
+    color: inherit !important;
+  }
+}
+
+
 /* ========== RTL MOBILE NAVBAR FIX (zappy-rtl-mobile-fix) ========== */
 /* High-specificity rules to ensure RTL positioning wins over any [lang="en"] conflicts */
 /* For RTL sites: hamburger on RIGHT, phone on LEFT (mirror of LTR layout) */
