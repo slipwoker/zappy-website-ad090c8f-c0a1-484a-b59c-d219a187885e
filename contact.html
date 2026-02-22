@@ -238,7 +238,7 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
     <!-- Cookie Consent -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css" />
     <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
     <!-- Mickidum Accessibility Toolbar -->
     <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
@@ -280,7 +280,8 @@
         .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
         .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
         .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
-        .sub-menu a { padding: 10px 0 !important; display: block !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; color: inherit !important; }
+        .navbar .sub-menu li a, nav.navbar .sub-menu li a, .zappy-products-dropdown .sub-menu a { color: inherit !important; }
         .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; }
       }
       @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
@@ -302,10 +303,10 @@
       <div class="search-wrapper">
         <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
         <button class="search-submit" id="mobile-search-submit" title="חיפוש">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         </button>
         <button class="close-search" id="close-mobile-search">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </button>
       </div>
       <div class="search-results" id="mobile-search-results"></div>
@@ -331,7 +332,7 @@
   <div class="nav-container">
     <div class="nav-brand">
       <a href="/" class="logo-link">
-        <img src="/assets/business-logo.webp" alt="Keves" class="logo">
+        <img src="/assets/business-logo.webp" alt="Keves" class="logo" />
       </a>
     </div>
     
@@ -372,10 +373,10 @@
   
   
   <main>
-    <section class="keves-contact-section" data-layout-spec="צור קשר-contact" id="zappy-section-0">
+    <section class="keves-contact-section" data-layout-spec="צור קשר-contact">
   <div class="keves-contact-container">
-    <div class="keves-contact-grid zappy-preserve-css-grid" id="zappy-auto-grid-1771769024558-bagtev" data-zappy-auto-grid="true" data-zappy-grid-align="start" data-original-item-width="560" data-original-gap="80px" style="grid-template-columns: 560px 560px;">
-      <div class="keves-contact-form-column" data-grid-item-index="0">
+    <div class="keves-contact-grid">
+      <div class="keves-contact-form-column">
         <h1 class="keves-contact-title">דברו עם כבש.</h1>
         <p class="keves-contact-intro">יש לכם רעיון פרוע? מצב רוח מצחיק? אנחנו רוצים לשמוע. תשלחו לנו הכל.</p>
         
@@ -400,17 +401,17 @@
             <textarea id="contact-message" name="message" class="keves-form-textarea" rows="5" required=""></textarea>
           </div>
           
-          <button type="submit" class="keves-form-submit btn-primary" data-element-type="button" data-element-id="btn-1771769024549-4n70zh23c" data-native-element="true">שלחו הודעה</button>
+          <button type="submit" class="keves-form-submit btn-primary">שלחו הודעה</button>
         </form>
       </div>
       
-      <div class="keves-contact-context-column" data-grid-item-index="1" style="overflow: hidden !important;">
+      <div class="keves-contact-context-column">
         <h2 class="keves-context-title">מה לשלוח</h2>
         <p class="keves-context-text">ספרו לנו על הפרויקט, הסטייל שאתם רוצים, והאנרגיה שאתם מחפשים. זה יכול להיות קמפיין, אירוע, שיתוף פעולה—מה שבא לכם. אנחנו אוהבים ליצור דברים חדשים ומפתיעים.</p>
         <p class="keves-context-text">תגידו לנו מתי אתם צריכים את זה, מה הקונספט, ואם יש לכם רפרנסים ויזואליים. ככל שתהיו יותר ספציפיים, כך נוכל לתת לכם משהו שבאמת מדהים.</p>
         
         <div class="keves-context-image-wrapper">
-          <div data-zappy-zoom-wrapper="true" data-element-id="img-1771769024552-lqsrl4a2w" data-element-type="image" data-zappy-zoom-wrapper-width="516px" data-zappy-zoom-wrapper-height="377px" data-zappy-zoom-wrapper-width-mode="px" data-zappy-zoom-clip="true" data-zappy-wrapper-margins-applied="true" style="position: relative !important; overflow: hidden !important; width: 516px !important; max-width: 100% !important; margin-left: auto !important; margin-right: auto !important; height: 377px !important; display: block !important;"><img data-placeholder="keves-contact-image-1" data-context="Neon-lit modern lounge studio set with magenta and purple lighting, plush seating, atmospheric photography setup for a bold Israeli comedy brand called Keves (sheep theme), cinematic moody vibe" width="600" height="450" src="/assets/business-general-service-upload-1771769039825.webp" alt="אולפן כבש - סט צילום עם תאורת ניאון" class="keves-context-image zappy-editable-image" data-element-type="image" data-element-id="img-1771769024552-lqsrl4a2w" data-resize-handler-attached="true" data-original-position="static" style="position: relative; object-fit: cover !important; object-position: 50% 50%; width: 516px !important; height: 376.672px !important; max-width: 100% !important; display: block; margin-top: 0px !important; margin-bottom: 0px !important;" data-zappy-original-width="516" data-zappy-original-height="376.671875" data-zappy-zoom="1"></div>
+          <img data-placeholder="keves-contact-image-1" data-context="Neon-lit modern lounge studio set with magenta and purple lighting, plush seating, atmospheric photography setup for a bold Israeli comedy brand called Keves (sheep theme), cinematic moody vibe" width="600" height="450" src="/assets/site-keves-contact-image-1.webp" alt="אולפן כבש - סט צילום עם תאורת ניאון" class="keves-context-image">
         </div>
       </div>
     </div>
@@ -548,7 +549,7 @@
   <div class="footer-container">
     <div class="footer-grid">
       <div class="footer-column footer-about">
-        <img src="/assets/business-logo.webp" alt="Keves" class="logo">
+        <img src="/assets/business-logo.webp" alt="Keves" class="logo" />
         <p class="footer-description">המקום שלך לאופנה ובידור - סטייל, יצירתיות וחוויות בלתי נשכחות</p>
       </div>
       
