@@ -1,79 +1,89 @@
-# Business — Generative Engine Optimization Map
+# Keves — Generative Engine Optimization Map
+
+> Keves is a humorous, bold Israeli brand born from a sharp, internet-savvy comedy show featuring Noam Sela, Matan Peretz, and Dor Yitach. The brand identity centers around sheep as the main visual element, with playful illustrations, comic winks, and cheeky graphics throughout. The vibe is late-night studio meets neon-lit urban energy—young, colorful, and a bit wild. The tone is witty, self-aware, and confidently theatrical, never taking itself too seriously while maintaining strong style and character.
 
 ---
 
 ## Pages
 
 ### בית
-https://example.com
+https://keves.zappy5.app
 ביגוד אורבני עם הומור חד וסטייל מטורף. קפוצ'ונים מצחיקים לגברים, חולצות עם הדפסים מטורללים וכבשים בכל מקום. קנו אונליין עכשיו!
 
 ### אודות
-https://example.com/about
+https://keves.zappy5.app/about
 גלו את המותג הישראלי שנולד מתוכנית קומדיה אינטרנטית עם נועם סלע, מתן פרץ ודור יתח. הומור חד, סטייל נועז ואנרגיה אורבנית צעירה.
 
 ### סטודיו
-https://example.com/studio
+https://keves.zappy5.app/studio
 צצו לסטודיו שלנו - המקום שבו נולדים הדפסים מטורפים, רעיונות פרועים וקולקציות שלא תראו בשום מקום אחר. אנרגיית ניאון וכבשים בכל פינה!
 
 ### צור קשר
-https://example.com/contact
+https://keves.zappy5.app/contact
 יש לכם שאלה, רעיון משוגע או סתם רוצים להגיד שלום? כתבו לנו! הצוות של Keves כאן בשבילכם עם כל ההומור והסבלנות שיש לנו.
 
 ### Products
-https://example.com/products
+https://keves.zappy5.app/products
 המוצרים שלנו - Keves
 
 ### Cart
-https://example.com/cart
+https://keves.zappy5.app/cart
 עגלת הקניות שלך
 
 ### Checkout
-https://example.com/checkout
+https://keves.zappy5.app/checkout
 תשלום
 
 ### Login
-https://example.com/login
+https://keves.zappy5.app/login
 התחברות לקוחות
 
 ### Account
-https://example.com/account
+https://keves.zappy5.app/account
 החשבון שלי
 
 ### Order Success
-https://example.com/order-success
+https://keves.zappy5.app/order-success
 תודה על ההזמנה
 
 ### Product Detail
-https://example.com/product/:slug
+https://keves.zappy5.app/product/:slug
 פרטי המוצר - Keves
 
 ### Category
-https://example.com/category/:slug
+https://keves.zappy5.app/category/:slug
 מוצרים - Keves
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://example.com/privacy
+https://keves.zappy5.app/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://example.com/terms
+https://keves.zappy5.app/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://example.com/accessibility
+https://keves.zappy5.app/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
 
 # Business Context (for LLM understanding)
 
-## About Business
+## About Keves
+Keves is a humorous, bold Israeli brand born from a sharp, internet-savvy comedy show featuring Noam Sela, Matan Peretz, and Dor Yitach. The brand identity centers around sheep as the main visual element, with playful illustrations, comic winks, and cheeky graphics throughout. The vibe is late-night studio meets neon-lit urban energy—young, colorful, and a bit wild. The tone is witty, self-aware, and confidently theatrical, never taking itself too seriously while maintaining strong style and character.
+
+## Target Audience
+קהל צעיר, אורבני, חובב הומור
+
+## Industry
+אופנה ובידור
+
 ---
 
 # Additional Resources
 
-- **Sitemap**: https://example.com/sitemap.xml
-- **Robots.txt**: https://example.com/robots.txt
+- **Sitemap**: https://keves.zappy5.app/sitemap.xml
+- **Robots.txt**: https://keves.zappy5.app/robots.txt
