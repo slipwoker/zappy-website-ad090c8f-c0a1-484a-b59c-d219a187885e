@@ -5,65 +5,65 @@
 ## Pages
 
 ### בית
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com
+https://keves.shop
 ביגוד אורבני עם הומור חד וסטייל מטורף. קפוצ'ונים מצחיקים לגברים, חולצות עם הדפסים מטורללים וכבשים בכל מקום. קנו אונליין עכשיו!
 
 ### אודות
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/about
+https://keves.shop/about
 גלו את המותג הישראלי שנולד מתוכנית קומדיה אינטרנטית עם נועם סלע, מתן פרץ ודור יתח. הומור חד, סטייל נועז ואנרגיה אורבנית צעירה.
 
 ### סטודיו
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/studio
+https://keves.shop/studio
 צצו לסטודיו שלנו - המקום שבו נולדים הדפסים מטורפים, רעיונות פרועים וקולקציות שלא תראו בשום מקום אחר. אנרגיית ניאון וכבשים בכל פינה!
 
 ### צור קשר
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/contact
+https://keves.shop/contact
 יש לכם שאלה, רעיון משוגע או סתם רוצים להגיד שלום? כתבו לנו! הצוות של Keves כאן בשבילכם עם כל ההומור והסבלנות שיש לנו.
 
 ### Products
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/products
+https://keves.shop/products
 המוצרים שלנו - Keves
 
 ### Cart
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/cart
+https://keves.shop/cart
 עגלת הקניות שלך
 
 ### Checkout
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/checkout
+https://keves.shop/checkout
 תשלום
 
 ### Login
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/login
+https://keves.shop/login
 התחברות לקוחות
 
 ### Account
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/account
+https://keves.shop/account
 החשבון שלי
 
 ### Order Success
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/order-success
+https://keves.shop/order-success
 תודה על ההזמנה
 
 ### Product Detail
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/product/:slug
+https://keves.shop/product/:slug
 פרטי המוצר - Keves
 
 ### Category
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/category/:slug
+https://keves.shop/category/:slug
 מוצרים - Keves
 
 ## Legal & Policy
 
 ### Privacy Policy
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/privacy
+https://keves.shop/privacy
 Information about how user data is collected, stored, and protected.
 
 ### Terms & Conditions
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/terms
+https://keves.shop/terms
 Legal terms describing service usage, rights, and policies.
 
 ### Accessibility Statement
-https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/accessibility
+https://keves.shop/accessibility
 Information about WCAG compliance and accessibility features.
 
 ---
@@ -75,5 +75,5 @@ Information about WCAG compliance and accessibility features.
 
 # Additional Resources
 
-- **Sitemap**: https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/sitemap.xml
-- **Robots.txt**: https://zappy-site-ad090c8f-c0a1-484a-b59c.onrender.com/robots.txt
+- **Sitemap**: https://keves.shop/sitemap.xml
+- **Robots.txt**: https://keves.shop/robots.txt

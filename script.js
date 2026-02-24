@@ -502,6 +502,8 @@ window.onload = function() {
 ;
 
 ;
+
+;
 /* ==ZAPPY E-COMMERCE JS START== */
 // E-commerce functionality
 (function() {
@@ -4958,6 +4960,7 @@ function renderProductDetail(container, product, t) {
       </div>
       <div class="product-info">
         <h1>${product.name}</h1>
+        ${product.brand ? '<div class="product-brand">' + product.brand + '</div>' : ''}
         ${showPrice ? `
         <div class="product-price" id="product-price-display">
           ${hasVariantPriceRange
@@ -5392,6 +5395,7 @@ function updateVariantUI(variant, product, t, selectedAttributes) {
   const stockDisplay = document.getElementById('product-stock-display');
   const skuDisplay = document.getElementById('product-sku-display');
   const addToCartBtn = document.getElementById('add-to-cart-btn');
+  const mainImage = document.getElementById('product-main-image');
   
   const basePrice = window.productBasePrice;
   const originalPrice = window.productOriginalPrice;
@@ -5399,6 +5403,11 @@ function updateVariantUI(variant, product, t, selectedAttributes) {
   const hasVariantPriceRange = window.productHasVariantPriceRange;
   const variantMinPrice = window.productVariantMinPrice;
   const startingAtLabel = getEcomText('startingAt', t.startingAt || 'Starting at');
+  
+  // Store original main image on first call
+  if (mainImage && !window._originalMainImageSrc) {
+    window._originalMainImageSrc = mainImage.src;
+  }
   
   if (variant) {
     // Use variant's own price if set, otherwise fall back to base price
@@ -5440,10 +5449,25 @@ function updateVariantUI(variant, product, t, selectedAttributes) {
       addToCartBtn.style.cursor = variantInStock ? 'pointer' : 'not-allowed';
     }
     
+    // Update main image if variant has a specific image
+    if (mainImage && variant.image) {
+      var variantImgSrc = variant.image;
+      if (window.resolveProductImageUrl) {
+        variantImgSrc = window.resolveProductImageUrl(variant.image);
+      }
+      mainImage.src = variantImgSrc;
+    } else if (mainImage && window._originalMainImageSrc) {
+      mainImage.src = window._originalMainImageSrc;
+    }
+    
     // Store selected variant
     window.selectedVariant = variant;
   } else {
     // No matching variant found
+    // Restore original image when no variant is matched
+    if (mainImage && window._originalMainImageSrc) {
+      mainImage.src = window._originalMainImageSrc;
+    }
     // Check if all attribute groups have a selection - if so, this is an unavailable combination
     var allGroupsSelected = false;
     var variantGroups = document.querySelectorAll('.variant-group');
