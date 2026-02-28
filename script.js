@@ -518,6 +518,8 @@ window.onload = function() {
 ;
 
 ;
+
+;
 /* ==ZAPPY E-COMMERCE JS START== */
 // E-commerce functionality
 (function() {
@@ -4906,32 +4908,77 @@ function renderProductGrid(grid, products, t, isFeaturedSection, viewMode) {
   }).join('');
 }
 
-// Load categories into catalog dropdown
+// Load categories into catalog dropdown, respecting parent/child hierarchy
 async function loadCatalogCategories() {
     const list = document.getElementById('zappy-category-links');
     const navList = document.getElementById('zappy-nav-category-links');
     if (!list && !navList) return;
-  const websiteId = window.ZAPPY_WEBSITE_ID;
+  var websiteId = window.ZAPPY_WEBSITE_ID;
   if (!websiteId) return;
   
   try {
-    const res = await fetch(buildApiUrlWithLang('/api/ecommerce/storefront/categories?websiteId=' + websiteId));
-    const data = await res.json();
+    var res = await fetch(buildApiUrlWithLang('/api/ecommerce/storefront/categories?websiteId=' + websiteId));
+    var data = await res.json();
     if (!data.success || !data.data?.length) return;
-    
-    // Use SEO-friendly slug URLs for categories, fallback to id for backward compatibility
-    const dropdownItemsHtml = data.data.map(cat => {
-      const categoryUrl = '/category/' + (cat.slug || cat.id);
-      return '<li data-category-id="' + cat.id + '" data-category-slug="' + (cat.slug || '') + '"><a href="' + categoryUrl + '">' + cat.name + '</a></li>';
+
+    var allCats = data.data;
+    var childrenMap = {};
+    var topLevel = [];
+    allCats.forEach(function(cat) {
+      if (cat.parent_id) {
+        if (!childrenMap[cat.parent_id]) childrenMap[cat.parent_id] = [];
+        childrenMap[cat.parent_id].push(cat);
+      } else {
+        topLevel.push(cat);
+      }
+    });
+
+    // Flatten descendants so grandchildren+ appear under their top-level ancestor
+    function collectDescendants(parentId) {
+      var result = [];
+      var direct = childrenMap[parentId] || [];
+      direct.forEach(function(child) {
+        result.push(child);
+        result = result.concat(collectDescendants(child.id));
+      });
+      return result;
+    }
+    topLevel.forEach(function(cat) {
+      childrenMap[cat.id] = collectDescendants(cat.id);
+    });
+
+    function catUrl(cat) { return '/category/' + (cat.slug || cat.id); }
+    var chevronSvg = '<svg class="catalog-menu-chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+    // Build HTML for the main nav dropdown (flat list with parent/child classes)
+    var dropdownItemsHtml = topLevel.map(function(cat) {
+      var children = childrenMap[cat.id] || [];
+      if (children.length === 0) {
+        return '<li data-category-id="' + cat.id + '" data-category-slug="' + (cat.slug || '') + '"><a href="' + catUrl(cat) + '">' + cat.name + '</a></li>';
+      }
+      var items = '<li class="zappy-nav-parent" data-category-id="' + cat.id + '" data-category-slug="' + (cat.slug || '') + '"><a href="' + catUrl(cat) + '">' + cat.name + '</a></li>';
+      children.forEach(function(child) {
+        items += '<li class="zappy-nav-child" data-category-id="' + child.id + '" data-category-slug="' + (child.slug || '') + '"><a href="' + catUrl(child) + '">' + child.name + '</a></li>';
+      });
+      return items;
     }).join('');
 
-    const barItemsHtml = data.data.map(cat => {
-      const categoryUrl = '/category/' + (cat.slug || cat.id);
-      return '<a href="' + categoryUrl + '" class="catalog-menu-item" data-category-id="' + cat.id + '" data-category-slug="' + (cat.slug || '') + '">' + cat.name + '</a>';
+    // Build HTML for the secondary catalog bar (flat links / dropdowns)
+    var barItemsHtml = topLevel.map(function(cat) {
+      var children = childrenMap[cat.id] || [];
+      if (children.length === 0) {
+        return '<a href="' + catUrl(cat) + '" class="catalog-menu-item" data-category-id="' + cat.id + '" data-category-slug="' + (cat.slug || '') + '">' + cat.name + '</a>';
+      }
+      var subLinks = children.map(function(child) {
+        return '<a href="' + catUrl(child) + '" class="catalog-menu-item" data-category-id="' + child.id + '" data-category-slug="' + (child.slug || '') + '">' + child.name + '</a>';
+      }).join('');
+      return '<div class="catalog-menu-parent" data-category-id="' + cat.id + '" data-category-slug="' + (cat.slug || '') + '">' +
+        '<a href="' + catUrl(cat) + '" class="catalog-menu-item catalog-menu-trigger">' + cat.name + ' ' + chevronSvg + '</a>' +
+        '<div class="sub-menu">' + subLinks + '</div>' +
+      '</div>';
     }).join('');
 
     if (navList) {
-      // Remove any previously injected category items
       navList.querySelectorAll('li[data-category-id]').forEach(function(node) { node.remove(); });
       navList.insertAdjacentHTML('beforeend', dropdownItemsHtml);
     }
@@ -4979,12 +5026,56 @@ function handleSubNavbarVisibility() {
   }
 }
 
+// Transparent navbar scroll effect — frosted glass on scroll
+// Activates only when --nav-bg is 'transparent' (set by navbar customization)
+function initTransparentNavbarScrollEffect() {
+  var nb = document.querySelector('nav.navbar, .navbar:not(.zappy-catalog-menu)');
+  if (!nb) return;
+  var cs = getComputedStyle(nb);
+  var bgc = cs.backgroundColor;
+  // Check if navbar background is transparent (rgba(0,0,0,0) or 'transparent')
+  var isTransparent = bgc === 'transparent' || bgc === 'rgba(0, 0, 0, 0)';
+  if (!isTransparent) return;
+
+  var cm = document.querySelector('.zappy-catalog-menu');
+  // Determine frosted glass color from the page background
+  var bodyBg = getComputedStyle(document.body).backgroundColor || 'rgb(0,0,0)';
+  var m = bodyBg.match(/\d+/g);
+  var frostedBg = m && m.length >= 3 ? 'rgba(' + m[0] + ',' + m[1] + ',' + m[2] + ',0.85)' : 'rgba(0,0,0,0.85)';
+  var threshold = 60;
+
+  nb.style.transition = 'background 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease, box-shadow 0.3s ease';
+  if (cm) cm.style.transition = 'background 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease';
+
+  function onScroll() {
+    var y = window.scrollY || window.pageYOffset;
+    if (y > threshold) {
+      nb.style.background = frostedBg;
+      nb.style.backdropFilter = 'blur(12px)';
+      nb.style.webkitBackdropFilter = 'blur(12px)';
+      nb.style.boxShadow = '0 2px 16px rgba(0,0,0,0.12)';
+      if (cm) { cm.style.background = frostedBg; cm.style.backdropFilter = 'blur(12px)'; cm.style.webkitBackdropFilter = 'blur(12px)'; }
+    } else {
+      nb.style.background = 'transparent';
+      nb.style.backdropFilter = 'none';
+      nb.style.webkitBackdropFilter = 'none';
+      nb.style.boxShadow = 'none';
+      if (cm) { cm.style.background = 'transparent'; cm.style.backdropFilter = 'none'; cm.style.webkitBackdropFilter = 'none'; }
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
 // Initialize featured products, categories, and product/category page details on load
 document.addEventListener('DOMContentLoaded', function() {
   // Mobile menu is handled by the main navbar script - no separate e-commerce handler needed
   
   // Hide sub-navbars on product/checkout/order pages
   handleSubNavbarVisibility();
+
+  // Activate frosted glass scroll effect for transparent navbars
+  initTransparentNavbarScrollEffect();
 
   // Fetch store settings first (handles announcement bar, product layout, etc.)
   fetchAdditionalJsSettings();

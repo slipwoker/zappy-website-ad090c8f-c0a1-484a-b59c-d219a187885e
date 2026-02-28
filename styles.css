@@ -5791,6 +5791,12 @@ body.accessibility-widget-visible ._access-menu {
 
 
 
+
+
+
+
+
+
 /* ==ZAPPY V2 E-COMMERCE THEME CSS== */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /* V2 E-COMMERCE CSS - Clean V2 Variables Only                                  */
@@ -7784,87 +7790,90 @@ main.page-container.ecommerce-page,
 /* This section ONLY overrides colors for V2 dark/light theme consistency      */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-/* Search box - V2 themed colors */
+/* Search box - input text uses nav-text (contrasts with navbar bg where input sits) */
 .nav-search-input { 
-  border-color: var(--border-dark) !important; 
-  background: rgba(255,255,255,0.05) !important; 
-  color: var(--text-light) !important; 
+  border-color: rgba(128,128,128,0.25) !important; 
+  background: rgba(128,128,128,0.08) !important; 
+  color: var(--nav-text, var(--text-light)) !important; 
 }
 .nav-search-input::placeholder {
-  color: var(--text-muted) !important;
+  color: rgba(128,128,128,0.6) !important;
 }
 .nav-search-input:focus { 
   border-color: var(--primary) !important; 
-  background: rgba(255,255,255,0.1) !important; 
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.1) !important; 
+  background: rgba(128,128,128,0.12) !important; 
+  box-shadow: 0 0 0 3px rgba(128,128,128,0.1) !important; 
 }
 .nav-search-btn { 
-  color: var(--text-muted) !important; 
+  color: var(--nav-text, var(--text-muted)) !important; 
 }
 .nav-search-btn:hover { 
-  background: rgba(255,255,255,0.1) !important; 
-  color: var(--primary) !important; 
+  background: rgba(128,128,128,0.12) !important; 
+  color: var(--nav-text-hover, var(--primary)) !important; 
 }
 
-/* Search results dropdown - V2 themed */
+/* Search results dropdown - uses surface bg with regular text (not nav text) */
 .nav-search-results { 
-  background: var(--bg-dark) !important; 
-  border-color: var(--border-dark) !important; 
+  background: var(--surface, var(--bg-light, #fff)) !important; 
+  border-color: rgba(128,128,128,0.2) !important; 
 }
 .nav-search-result-item { 
-  border-bottom-color: var(--border-dark) !important; 
+  border-bottom-color: rgba(128,128,128,0.15) !important; 
 }
 .nav-search-result-item:hover { 
-  background: rgba(255,255,255,0.1) !important; 
+  background: rgba(128,128,128,0.1) !important; 
 }
 .nav-search-result-name { 
-  color: var(--text-light) !important; 
+  color: var(--text, var(--text-light)) !important; 
+}
+.nav-search-result-item a {
+  color: var(--text, var(--text-light)) !important;
 }
 .nav-search-result-price { 
   color: var(--primary) !important; 
 }
 .nav-search-no-results { 
-  color: var(--text-muted) !important;
+  color: rgba(128,128,128,0.6) !important;
 }
 
-/* Cart link - V2 themed */
+/* Cart link - uses nav text for icon color */
 .cart-link.nav-cart { 
-  color: var(--text-light) !important; 
+  color: var(--nav-text, var(--text-light)) !important; 
 }
 .cart-link.nav-cart:hover { 
-  background: rgba(255,255,255,0.1) !important; 
-  color: var(--primary) !important; 
+  background: rgba(128,128,128,0.12) !important; 
+  color: var(--nav-text-hover, var(--primary)) !important; 
 }
 .cart-link.nav-cart .cart-count { 
   background: var(--accent, #FF2DAA) !important; 
   color: #fff !important; 
 }
 .cart-link.nav-cart:hover .cart-count { 
-  background: var(--text-light) !important; 
+  background: #fff !important; 
   color: var(--accent, #FF2DAA) !important; 
 }
 
-/* Login link - V2 themed */
+/* Login link - uses nav text for icon color */
 .login-link.nav-login { 
-  color: var(--text-light) !important; 
+  color: var(--nav-text, var(--text-light)) !important; 
 }
 .login-link.nav-login:hover { 
-  background: rgba(255,255,255,0.1) !important; 
-  color: var(--primary) !important; 
+  background: rgba(128,128,128,0.12) !important; 
+  color: var(--nav-text-hover, var(--primary)) !important; 
 }
 
-/* Search toggle button - V2 themed */
+/* Search toggle button - uses nav text for icon color */
 .nav-search-toggle {
-  color: var(--text-light) !important;
+  color: var(--nav-text, var(--text-light)) !important;
 }
 .nav-search-toggle:hover {
-  background: rgba(255,255,255,0.1) !important;
+  background: rgba(128,128,128,0.12) !important;
 }
 
-/* Nav cart count (alternate selector) - V2 themed */
+/* Nav cart count (alternate selector) */
 .nav-cart-count {
   background: var(--primary) !important;
-  color: var(--bg-dark) !important;
+  color: var(--text-light) !important;
 }
 
 /* Mobile search panel */
@@ -7924,7 +7933,8 @@ main.page-container.ecommerce-page,
   padding: 0;
 }
 .mobile-search-panel .close-search:hover { 
-  background: rgba(255,255,255,0.1); 
+  background: rgba(255,255,255,0.1);
+  color: var(--text-light);
 }
 .mobile-search-panel .close-search svg {
   width: 20px;
@@ -8196,23 +8206,20 @@ html[lang="ar"] .mobile-search-panel .search-wrapper,
     background: rgba(255,255,255,0.05) !important;
   }
 
-  /* Icon color must contrast with circle background (surface), NOT the navbar bg.
-     Must use compound selectors to beat desktop rules:
-     Desktop sets .cart-link.nav-cart { color: var(--text-...) } at 0-2-0.
-     Single-class selectors (0-1-0) lose that specificity fight. */
+  /* Icon color: use nav-text which is contrast-checked against nav-bg.
+     Compound selectors beat desktop rules (0-2-0 > 0-1-0). */
   .cart-link.nav-cart,
   .login-link.nav-login,
   .nav-search-toggle {
-    color: var(--text-light) !important;
+    color: var(--nav-text, var(--text-light)) !important;
   }
 
-  /* Mobile nav icon hover — preserve circle background and icon contrast */
-  /* Must match desktop specificity: .cart-link.nav-cart:hover is 0-3-0 */
+  /* Mobile nav icon hover */
   .cart-link.nav-cart:hover,
   .login-link.nav-login:hover,
   .nav-search-toggle:hover {
-    background: rgba(255,255,255,0.05) !important;
-    color: var(--text-light) !important;
+    background: rgba(128,128,128,0.12) !important;
+    color: var(--nav-text, var(--text-light)) !important;
   }
   
   /* Mobile nav SVG icons - consistent size */
@@ -8326,12 +8333,9 @@ html[lang="ar"] .mobile-search-panel .search-wrapper,
     align-items: center !important;
     justify-content: center !important;
     border-radius: 9999px !important;
-    border: 1px solid rgba(255,255,255,0.2) !important;
-    background: transparent !important;
-    /* IMPORTANT: Icons inherit from currentColor via SVG stroke="currentColor" */
-    /* - dark navbar + transparent pill => light icon */
-    /* - light/neutral pill => dark icon */
-    color: var(--text-light) !important;
+    border: 1px solid rgba(128,128,128,0.2) !important;
+    background: rgba(128,128,128,0.06) !important;
+    color: var(--nav-text, var(--text-light)) !important;
     padding: 0 !important;
     position: relative !important; /* anchor cart badge */
     box-sizing: border-box !important;
@@ -8497,10 +8501,11 @@ body.zappy-focused-page .zappy-announcement-bar {
 
 /* Catalog menu (secondary navigation) - desktop only */
 /* NOTE: Mobile visibility is handled via @media (max-width: 768px) { .zappy-catalog-menu { display: none !important; } } */
+/* Catalog menu always inherits navbar colors, NOT ecommerce pages bg */
 @media (min-width: 769px) {
   .zappy-catalog-menu {
-    background: var(--bg-dark) !important;
-    border-bottom: 1px solid var(--border-dark) !important;
+    background: var(--nav-bg, var(--background, #fff)) !important;
+    border-bottom: 1px solid rgba(128,128,128,0.15) !important;
     padding: 0;
     position: fixed !important;
     top: 60px !important;
@@ -8539,7 +8544,7 @@ body.zappy-focused-page .zappy-announcement-bar {
   padding: 8px 16px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--text-light) !important;
+  color: var(--nav-text, var(--text, #333)) !important;
   text-decoration: none;
   border-radius: 20px;
   transition: all 0.2s;
@@ -8547,8 +8552,8 @@ body.zappy-focused-page .zappy-announcement-bar {
 }
 .catalog-menu-item:hover,
 .catalog-menu-all:hover {
-  color: var(--primary) !important;
-  background: rgba(255,255,255,0.1);
+  color: var(--nav-text-hover, var(--primary)) !important;
+  background: rgba(128,128,128,0.1);
 }
 .catalog-menu-categories {
   display: flex;
@@ -8566,8 +8571,7 @@ body.zappy-focused-page .zappy-announcement-bar {
   top: 100%;
   right: 0;
   min-width: 200px;
-  /* Always use light background for submenu readability (works for both dark and light themes) */
-  background: var(--bg-light) !important;
+  background: var(--nav-bg, var(--bg-light)) !important;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   padding: 8px;
@@ -8598,15 +8602,14 @@ body.zappy-focused-page .zappy-announcement-bar {
 .zappy-products-dropdown .sub-menu a {
   display: block;
   padding: 10px 16px;
-  /* Always use dark text for light submenu background */
-  color: var(--text-dark);
+  color: var(--nav-text, var(--text-dark));
   text-decoration: none;
   border-radius: 6px;
   transition: background-color 0.2s ease;
 }
 .zappy-products-dropdown .sub-menu a:hover {
-  background: rgba(0,0,0,0.05) !important;
-  color: var(--primary) !important;
+  background: rgba(128,128,128,0.1) !important;
+  color: var(--nav-text-hover, var(--primary)) !important;
 }
 
 /* V2 Navbar positioning for e-commerce - DO NOT include generic 'header' as it matches content headers */
@@ -8632,7 +8635,7 @@ nav.navbar,
 .zappy-catalog-menu,
 #zappy-catalog-menu {
   z-index: 99998 !important;
-  background: var(--bg-dark) !important;
+  background: var(--nav-bg, var(--background, #fff)) !important;
 }
 
 /* Ensure content sections and their headers don't overlap navigation */
@@ -8768,11 +8771,11 @@ main,
    SUBMENU VISIBILITY FIXES
    ───────────────────────────────────────────────────────────────────────────── */
 
-/* Navbar submenu - always light background for readability */
+/* Navbar submenu - uses nav background for consistency */
 .navbar .sub-menu,
 .navbar ul.sub-menu,
 nav.navbar .sub-menu {
-  background: var(--bg-light) !important;
+  background: var(--nav-bg, var(--bg-light)) !important;
   border-radius: 8px !important;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
   margin: 0 !important;
@@ -8780,12 +8783,12 @@ nav.navbar .sub-menu {
 }
 .navbar .sub-menu li a,
 nav.navbar .sub-menu li a {
-  color: var(--text-dark) !important;
+  color: var(--nav-text, var(--text-dark)) !important;
 }
 .navbar .sub-menu li a:hover,
 nav.navbar .sub-menu li a:hover {
-  background: rgba(0,0,0,0.05) !important;
-  color: var(--accent, var(--primary)) !important;
+  background: rgba(128,128,128,0.1) !important;
+  color: var(--nav-text-hover, var(--accent, var(--primary))) !important;
 }
 
 /* Bridge element to prevent submenu from disappearing on hover */
@@ -8807,16 +8810,16 @@ nav.navbar .menu-item-has-children::after,
 
 /* Catalog dropdown submenu */
 .zappy-products-dropdown .sub-menu {
-  background: var(--bg-light) !important;
+  background: var(--nav-bg, var(--bg-light)) !important;
   margin: 0 !important;
   padding-top: 12px !important;
 }
 .zappy-products-dropdown .sub-menu a {
-  color: var(--text-dark) !important;
+  color: var(--nav-text, var(--text-dark)) !important;
 }
 .zappy-products-dropdown .sub-menu a:hover {
-  background: rgba(0,0,0,0.05) !important;
-  color: var(--accent, var(--primary)) !important;
+  background: rgba(128,128,128,0.1) !important;
+  color: var(--nav-text-hover, var(--accent, var(--primary))) !important;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -8867,12 +8870,11 @@ nav.navbar .menu-item-has-children::after,
     background: rgba(255,255,255,0.05) !important;
   }
 
-  /* Icon color must contrast with circle background (surface).
-     Use compound selectors to beat desktop rules (0-2-0 > 0-1-0). */
+  /* Icon color: use nav-text for consistency with navbar theme */
   .cart-link.nav-cart,
   .login-link.nav-login,
   .nav-search-toggle {
-    color: var(--text-light) !important;
+    color: var(--nav-text, var(--text-light)) !important;
   }
   
   .cart-link svg,
@@ -9790,6 +9792,22 @@ nav.navbar .menu-item-has-children::after,
   
   .hero-container {
     gap: 16px !important;
+  }
+
+  /* ========== GRID OVERFLOW FIX ========== */
+  /* CSS Grid items default to min-width:auto, preventing them from shrinking
+     below their content's intrinsic size. Fixed-width zoom wrappers or large
+     images inside grid items can force the column wider than the viewport. */
+  .hero-container > * {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Zappy-inserted image elements with fixed-width zoom wrappers must
+     respect the parent container width on mobile */
+  .zappy-inserted-element,
+  [data-zappy-zoom-wrapper] {
+    max-width: 100% !important;
   }
 }
 
