@@ -528,6 +528,8 @@ window.onload = function() {
 ;
 
 ;
+
+;
 /* ==ZAPPY E-COMMERCE JS START== */
 // E-commerce functionality
 (function() {
@@ -1556,6 +1558,48 @@ function stripHtmlToText(html) {
     // Legacy filter buttons removed - sidebar filters handle all filtering
   }
   
+  window.getLegacyColorSwatchHex = function getLegacyColorSwatchHex(colorValue) {
+    var bgColor = String(colorValue || '').trim();
+    if (!/^#[0-9A-Fa-f]{3,8}$/.test(bgColor)) {
+      var lc = bgColor.toLowerCase();
+      var _clr = {'dark grey':'#555','dark gray':'#555','light grey':'#d3d3d3','light gray':'#d3d3d3','light blue':'lightblue','dark blue':'darkblue','light green':'lightgreen','dark green':'darkgreen','dark red':'darkred','light pink':'lightpink','dark orange':'darkorange','sky blue':'skyblue','royal blue':'royalblue','navy blue':'navy','forest green':'forestgreen','olive green':'olivedrab','sea green':'seagreen','hot pink':'hotpink','deep pink':'deeppink','dark violet':'darkviolet','slate grey':'slategrey','slate gray':'slategray','dim grey':'dimgrey','dim gray':'dimgray','steel blue':'steelblue','pale green':'palegreen','off white':'#f5f5f0','burgundy':'#800020','charcoal':'#36454f','champagne':'#f7e7ce','sand':'#c2b280','taupe':'#483c32','wine':'#722f37','rust':'#b7410e','sage':'#bcb88a','mint':'#98ff98','peach':'#ffcba4','cream':'#fffdd0','mauve':'#e0b0ff'};
+      bgColor = _clr[lc] || lc;
+    }
+    if (typeof CSS !== 'undefined' && CSS && typeof CSS.supports === 'function' && !CSS.supports('color', bgColor)) {
+      return '#94a3b8';
+    }
+    return bgColor;
+  };
+
+  window.getConfiguredColorSwatchHex = function getConfiguredColorSwatchHex(source, attrKey, colorValue) {
+    if (!colorValue) return '';
+    if (/^#[0-9A-Fa-f]{3,8}$/.test(String(colorValue).trim())) return String(colorValue).trim();
+
+    var variantConfig = source && (source.variant_config || source.variantConfig);
+    if (typeof variantConfig === 'string') {
+      try { variantConfig = JSON.parse(variantConfig); } catch (e) { variantConfig = null; }
+    }
+    var selections = variantConfig && variantConfig.selections && typeof variantConfig.selections === 'object'
+      ? variantConfig.selections
+      : null;
+    if (selections) {
+      var selectionKey = Object.keys(selections).find(function(key) {
+        return String(key).toLowerCase() === String(attrKey || '').toLowerCase();
+      });
+      var values = selectionKey && Array.isArray(selections[selectionKey] && selections[selectionKey].values)
+        ? selections[selectionKey].values
+        : [];
+      var normalizedValue = String(colorValue).trim().replace(/s+/g, ' ').toLowerCase();
+      var match = values.find(function(value) {
+        var label = typeof value === 'string' ? value : value && value.label;
+        return label && String(label).trim().replace(/s+/g, ' ').toLowerCase() === normalizedValue && value && value.hex;
+      });
+      if (match && match.hex) return match.hex;
+    }
+
+    return window.getLegacyColorSwatchHex(colorValue);
+  };
+
   // Render cart drawer (slide-out panel)
   function renderCartDrawer() {
     const drawerItems = document.getElementById('cart-drawer-items');
@@ -1579,19 +1623,19 @@ function stripHtmlToText(html) {
         var parts = [];
         Object.entries(item.selectedVariant.attributes).forEach(function(entry) {
           var key = entry[0], value = entry[1];
+          var displayValue =
+            item.selectedVariant.attributes_display &&
+            Object.prototype.hasOwnProperty.call(item.selectedVariant.attributes_display, key)
+              ? item.selectedVariant.attributes_display[key]
+              : value;
           if (value) {
             var label = attrLabels[key.toLowerCase()] || key;
-            var isColor = key.toLowerCase() === 'color';
+            var isColor = key.toLowerCase() === 'color' || key.toLowerCase().includes('color');
             if (isColor) {
-              var bgColor = value;
-              if (!/^#[0-9A-Fa-f]{3,6}$/.test(value)) {
-                var lc = value.toLowerCase();
-                var _clr = {'dark grey':'#555','dark gray':'#555','light grey':'#d3d3d3','light gray':'#d3d3d3','light blue':'lightblue','dark blue':'darkblue','light green':'lightgreen','dark green':'darkgreen','dark red':'darkred','light pink':'lightpink','dark orange':'darkorange','sky blue':'skyblue','royal blue':'royalblue','navy blue':'navy','forest green':'forestgreen','olive green':'olivedrab','hot pink':'hotpink','deep pink':'deeppink','dark violet':'darkviolet','slate grey':'slategrey','slate gray':'slategray','dim grey':'dimgrey','dim gray':'dimgray','off white':'#f5f5f0','burgundy':'#800020','charcoal':'#36454f','champagne':'#f7e7ce','sand':'#c2b280','taupe':'#483c32','wine':'#722f37','rust':'#b7410e','sage':'#bcb88a','mint':'#98ff98','peach':'#ffcba4','cream':'#fffdd0','mauve':'#e0b0ff'};
-                bgColor = _clr[lc] || lc;
-              }
-              parts.push('<span class="cart-item-attr"><span class="cart-item-attr-label">' + label + ':</span> <span class="cart-item-color-swatch" title="' + value + '" style="display:inline-block;width:14px;height:14px;border-radius:50%;background-color:' + bgColor + ';border:1px solid rgba(0,0,0,0.15);vertical-align:middle;margin-' + (document.documentElement.dir === 'rtl' ? 'right' : 'left') + ':4px;"></span></span>');
+              var bgColor = window.getConfiguredColorSwatchHex(item, key, value);
+              parts.push('<span class="cart-item-attr"><span class="cart-item-attr-label">' + label + ':</span> <span class="cart-item-color-swatch" title="' + displayValue + '" style="display:inline-block;width:14px;height:14px;border-radius:50%;background-color:' + bgColor + ';border:1px solid rgba(0,0,0,0.15);vertical-align:middle;margin-' + (document.documentElement.dir === 'rtl' ? 'right' : 'left') + ':4px;"></span></span>');
             } else {
-              parts.push('<span class="cart-item-attr"><span class="cart-item-attr-label">' + label + ':</span> ' + value + '</span>');
+              parts.push('<span class="cart-item-attr"><span class="cart-item-attr-label">' + label + ':</span> ' + displayValue + '</span>');
             }
           }
         });
@@ -6198,6 +6242,7 @@ function renderProductDetail(container, product, t) {
   if (hasVariants) {
     // Group variants by attribute type to create selection options
     const attributeGroups = {};
+    const attributeDisplayMap = {};
     variants.forEach(variant => {
       if (variant.attributes && variant.is_active !== false) {
         Object.entries(variant.attributes).forEach(([key, value]) => {
@@ -6205,6 +6250,16 @@ function renderProductDetail(container, product, t) {
             attributeGroups[key] = new Set();
           }
           attributeGroups[key].add(value);
+          if (!attributeDisplayMap[key]) {
+            attributeDisplayMap[key] = {};
+          }
+          const displayValue =
+            variant.attributes_display && Object.prototype.hasOwnProperty.call(variant.attributes_display, key)
+              ? variant.attributes_display[key]
+              : value;
+          if (!attributeDisplayMap[key][value]) {
+            attributeDisplayMap[key][value] = displayValue;
+          }
         });
       }
     });
@@ -6238,20 +6293,17 @@ function renderProductDetail(container, product, t) {
           if (ca !== cb) return ca - cb;
           return String(a).localeCompare(String(b));
         });
-        const isColorAttr = attrKey.toLowerCase() === 'color';
+        const isColorAttr = attrKey.toLowerCase() === 'color' || attrKey.toLowerCase().includes('color');
         
         const optionsHtml = valuesArray.map(value => {
-          // For color attribute, try to use color as background
+          const displayValue =
+            (attributeDisplayMap[attrKey] && attributeDisplayMap[attrKey][value]) || value;
+          // For color attribute, prefer configured hex and fall back for older sites.
           if (isColorAttr) {
-            var bgColor = value;
-            if (!/^#[0-9A-Fa-f]{3,6}$/.test(value)) {
-              var lc = value.toLowerCase();
-              var _clr = {'dark grey':'#555','dark gray':'#555','light grey':'#d3d3d3','light gray':'#d3d3d3','light blue':'lightblue','dark blue':'darkblue','light green':'lightgreen','dark green':'darkgreen','dark red':'darkred','light pink':'lightpink','dark orange':'darkorange','sky blue':'skyblue','royal blue':'royalblue','navy blue':'navy','forest green':'forestgreen','olive green':'olivedrab','sea green':'seagreen','hot pink':'hotpink','deep pink':'deeppink','dark violet':'darkviolet','slate grey':'slategrey','slate gray':'slategray','dim grey':'dimgrey','dim gray':'dimgray','steel blue':'steelblue','pale green':'palegreen','off white':'#f5f5f0','burgundy':'#800020','charcoal':'#36454f','champagne':'#f7e7ce','sand':'#c2b280','taupe':'#483c32','wine':'#722f37','rust':'#b7410e','sage':'#bcb88a','mint':'#98ff98','peach':'#ffcba4','cream':'#fffdd0','mauve':'#e0b0ff'};
-              bgColor = _clr[lc] || lc;
-            }
-            return '<button type="button" class="variant-option color-swatch" data-attr="' + attrKey + '" data-value="' + value + '" style="background-color: ' + bgColor + ';" title="' + value + '"></button>';
+            var bgColor = window.getConfiguredColorSwatchHex(product, attrKey, value);
+            return '<button type="button" class="variant-option color-swatch" data-attr="' + attrKey + '" data-value="' + value + '" data-display-value="' + displayValue + '" data-color-hex="' + bgColor + '" style="background-color: ' + bgColor + ';" title="' + displayValue + '"></button>';
           }
-          return '<button type="button" class="variant-option" data-attr="' + attrKey + '" data-value="' + value + '">' + value + '</button>';
+          return '<button type="button" class="variant-option" data-attr="' + attrKey + '" data-value="' + value + '" data-display-value="' + displayValue + '">' + displayValue + '</button>';
         }).join('');
         
         return '<div class="variant-group" data-group="' + attrKey + '"><label class="variant-group-label">' + label + ': <span class="variant-selected-value"></span></label><div class="variant-options">' + optionsHtml + '</div></div>';
@@ -6896,7 +6948,7 @@ function initVariantSelection(product, t) {
       // Update the variant label to show selected value inline
       var selectedValueSpan = document.querySelector('.variant-group[data-group="' + attrKey + '"] .variant-selected-value');
       if (selectedValueSpan) {
-        selectedValueSpan.textContent = attrValue;
+        selectedValueSpan.textContent = this.getAttribute('data-display-value') || attrValue;
       }
       
       // Update visibility/stock of options in other groups
@@ -6916,7 +6968,7 @@ function initVariantSelection(product, t) {
             firstVisible.classList.add('selected');
             selectedAttributes[otherKey] = firstVisible.getAttribute('data-value');
             var otherValueSpan = document.querySelector('.variant-group[data-group="' + otherKey + '"] .variant-selected-value');
-            if (otherValueSpan) otherValueSpan.textContent = firstVisible.getAttribute('data-value');
+            if (otherValueSpan) otherValueSpan.textContent = firstVisible.getAttribute('data-display-value') || firstVisible.getAttribute('data-value');
             anyAutoSelected = true;
           } else {
             delete selectedAttributes[otherKey];
@@ -6932,7 +6984,7 @@ function initVariantSelection(product, t) {
         btn.classList.add('selected');
         selectedAttributes[attrKey] = attrValue;
         var selectedValueSpanRefresh = document.querySelector('.variant-group[data-group="' + attrKey + '"] .variant-selected-value');
-        if (selectedValueSpanRefresh) selectedValueSpanRefresh.textContent = attrValue;
+        if (selectedValueSpanRefresh) selectedValueSpanRefresh.textContent = btn.getAttribute('data-display-value') || attrValue;
       }
       
       // Find matching variant and update UI
@@ -7198,6 +7250,7 @@ function addProductToCart() {
       name: selectedVariant.name,
       sku: selectedVariant.sku,
       attributes: selectedVariant.attributes,
+      attributes_display: selectedVariant.attributes_display || selectedVariant.attributes,
       price: variantPrice
     };
     cartItem.variantName = selectedVariant.name;
