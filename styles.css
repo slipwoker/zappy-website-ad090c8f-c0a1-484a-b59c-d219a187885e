@@ -9660,7 +9660,6 @@ main,
   font-family: 'Heebo', 'Rubik', system-ui, -apple-system, 'Segoe UI', Arial, sans-serif;
 }
 
-/* ── Background ── */
 .index-hero-section [data-preserve-bg="0"] {
   position: absolute;
   inset: 0;
