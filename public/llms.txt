@@ -1,4 +1,6 @@
-# Business — Generative Engine Optimization Map
+# Keves — Generative Engine Optimization Map
+
+> Keves is a humorous, bold Israeli brand born from a sharp, internet-savvy comedy show featuring Noam Sela, Matan Peretz, and Dor Yitach. The brand identity centers around sheep as the main visual element, with playful illustrations, comic winks, and cheeky graphics throughout. The vibe is late-night studio meets neon-lit urban energy—young, colorful, and a bit wild. The tone is witty, self-aware, and confidently theatrical, never taking itself too seriously while maintaining strong style and character.
 
 ---
 
@@ -68,12 +70,92 @@ Information about WCAG compliance and accessibility features.
 
 ---
 
-# Business Context (for LLM understanding)
+## Products
 
-## About Business
+**Total active products: 7**
+
+### מגן קלפים נועם ודור
+https://keves.shop/product/mgn-klpym-nvam-vdvr-ks7zgj
+- Price: 59.00 ILS
+- Availability: In stock
+- Category: קלפים
+- SKU: ND-001-02
+- Description: מגן קלפים
+- Image: https://keves.shop/assets/product-autofit-1774382837507-mma7o.webp
+
+### ALL IN כובע
+https://keves.shop/product/all-in-kvba-5by9ju
+- Price: 129.00 ILS
+- Availability: In stock
+- Category: כובעים
+- SKU: KC-02
+- Description: כובע
+- Image: https://keves.shop/assets/product-1771860949920-ru1zss.webp
+
+### קפוצ'ון KEVES לוגו
+https://keves.shop/product/kpvtsvn-keves-lvgv-9xfazh
+- Price: 199.00 ILS
+- Availability: In stock
+- Category: קפוצ'ון
+- SKU: KH-001-L
+- Description: קפוצון
+- Image: https://keves.shop/assets/product-1771860977199-ch184h.webp
+
+### טי שירט ALL IN אוברסייז
+https://keves.shop/product/ty-shyrt-all-in-avbrsyyz-ogzacf
+- Price: 179.00 ILS
+- Availability: In stock
+- Category: טי שירט
+- SKU: KT-003-L
+- Description: טי שירט
+- Image: https://keves.shop/assets/product-1771861030081-5g3r2.webp
+
+### כובע KEVES לוגו
+https://keves.shop/product/kvba-keves-lvgv-8rnwe4
+- Price: 129.00 ILS
+- Availability: In stock
+- Category: כובעים
+- SKU: KC-01
+- Description: כובע
+- Image: https://keves.shop/assets/product-1771861053076-4q8nhg.webp
+
+### קפוצ'ון ALL IN אוברסייז
+https://keves.shop/product/kpvtsvn-all-in-avbrsyyz-ht77w4
+- Price: 199.00 ILS
+- Availability: In stock
+- Category: קפוצ'ון
+- SKU: KH-003-L
+- Description: קפוצון
+- Image: https://keves.shop/assets/product-1771861081506-azg8gd.webp
+
+### טי שירט KEVES לוגו
+https://keves.shop/product/ty-shyrt-keves-lvgv-a2xmes
+- Price: 179.00 ILS
+- Availability: In stock
+- Category: טי שירט
+- SKU: KT-001-L
+- Description: טי שירט
+- Image: https://keves.shop/assets/product-1771861118713-03i9u.webp
+
 ---
 
-# Additional Resources
+# Business Context (for LLM understanding)
 
-- **Sitemap**: https://keves.shop/sitemap.xml
-- **Robots.txt**: https://keves.shop/robots.txt
+## About Keves
+Keves is a humorous, bold Israeli brand born from a sharp, internet-savvy comedy show featuring Noam Sela, Matan Peretz, and Dor Yitach. The brand identity centers around sheep as the main visual element, with playful illustrations, comic winks, and cheeky graphics throughout. The vibe is late-night studio meets neon-lit urban energy—young, colorful, and a bit wild. The tone is witty, self-aware, and confidently theatrical, never taking itself too seriously while maintaining strong style and character.
+
+## Target Audience
+קהל צעיר, אורבני, חובב הומור
+
+## Industry
+אופנה ובידור
+
+---
+
+# Machine-readable feeds
+
+- Sitemap (XML): https://keves.shop/sitemap.xml
+- Robots: https://keves.shop/robots.txt
+- Flattened page text (for LLMs): https://keves.shop/llms-full.txt
+- Products (JSON): https://keves.shop/products.json
+- Products (Google Merchant RSS): https://keves.shop/product-feed.xml
